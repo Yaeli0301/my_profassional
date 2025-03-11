@@ -1,0 +1,90 @@
+{{#> layout title="התור שלך נקבע מחדש"}}
+    <h2>שלום {{clientName}},</h2>
+    
+    {{#if rescheduledByProfessional}}
+    <p>המקצוען שינה את מועד התור שנקבע. להלן הפרטים החדשים:</p>
+    {{else}}
+    <p>התור שלך נקבע מחדש בהצלחה. להלן הפרטים החדשים:</p>
+    {{/if}}
+    
+    <div class="info-box">
+        <h3>פרטי התור החדש:</h3>
+        <p><strong>מקצוען:</strong> {{professionalName}}</p>
+        <p><strong>שירות:</strong> {{serviceName}}</p>
+        <p><strong>תאריך ושעה חדשים:</strong> {{newDateTime}}</p>
+        {{#if location}}
+        <p><strong>מיקום:</strong> {{location}}</p>
+        {{/if}}
+        {{#if price}}
+        <p><strong>מחיר:</strong> ₪{{price}}</p>
+        {{/if}}
+    </div>
+
+    <div class="info-box" style="background-color: #fff3e0;">
+        <h3>פרטי התור הקודם:</h3>
+        <p><strong>תאריך ושעה:</strong> {{oldDateTime}}</p>
+    </div>
+
+    {{#if reschedulingReason}}
+    <div style="margin: 20px 0;">
+        <h3>סיבת השינוי:</h3>
+        <p>{{reschedulingReason}}</p>
+    </div>
+    {{/if}}
+
+    {{#if rescheduledByProfessional}}
+    <div style="margin: 20px 0;">
+        <h3>הודעה מהמקצוען:</h3>
+        {{#if professionalMessage}}
+        <p>{{professionalMessage}}</p>
+        {{/if}}
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <p>אם המועד החדש אינו מתאים לך, תוכל/י:</p>
+            <div style="margin: 10px 0;">
+                <a href="{{rescheduleUrl}}" class="button" style="background-color: #059669;">בחר/י מועד אחר</a>
+            </div>
+            <div style="margin: 10px 0;">
+                <a href="{{cancelUrl}}" class="button" style="background-color: #dc2626;">בטל/י את התור</a>
+            </div>
+        </div>
+    </div>
+    {{/if}}
+
+    <div style="text-align: center;">
+        <a href="{{appointmentUrl}}" class="button">צפה בפרטי התור</a>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h3>מה הלאה?</h3>
+        <ul>
+            <li>תקבל/י תזכורת 24 שעות לפני התור החדש</li>
+            <li>תוכל/י לתקשר עם המקצוען דרך הצ'אט באתר</li>
+            <li>אם צריך לבטל או לשנות את התור שוב, אנא עשה/י זאת לפחות 24 שעות מראש</li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p>עדכון היומן שלך:</p>
+        {{#if oldGoogleCalendarUrl}}
+        <a href="{{oldGoogleCalendarUrl}}" class="button" style="background-color: #dc2626;">הסר את התור הישן מ-Google Calendar</a>
+        {{/if}}
+        <a href="{{newGoogleCalendarUrl}}" class="button" style="background-color: #4285f4;">הוסף את התור החדש ל-Google Calendar</a>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h3>צריך/ה עזרה?</h3>
+        <p>אם יש לך שאלות או בעיות, תוכל/י:</p>
+        <ul>
+            <li>ליצור קשר עם המקצוען דרך הצ'אט באתר</li>
+            <li>לפנות לצוות התמיכה שלנו בטלפון: {{supportPhone}}</li>
+            <li>לשלוח לנו מייל: {{supportEmail}}</li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="color: #666; font-size: 14px;">
+            נשמח לראותך במועד החדש!
+        </p>
+    </div>
+{{/layout}}

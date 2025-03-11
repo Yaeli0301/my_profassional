@@ -1,44 +1,40 @@
 const express = require('express');
 const router = express.Router();
-const Category = require('../Models/category');
+const categoryController = require('../Controllers/categoryController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-// Get all categories
-router.get('/', async (req, res) => {
-  try {
-    const categories = await Category.find({ active: true })
-      .populate('subcategories')
-      .sort('name');
-    res.json(categories);
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching categories', error: err.message });
+// Middleware to check if user is admin
+const isAdmin = (req, res, next) => {
+  if (!req.user?.isAdmin) {
+    return res.status(403).json({ message: 'נדרשת הרשאת מנהל' });
   }
-});
+  next();
+};
 
-// Get category by ID
-router.get('/:id', async (req, res) => {
-  try {
-    const category = await Category.findById(req.params.id)
-      .populate('subcategories');
-    if (!category) {
-      return res.status(404).json({ message: 'Category not found' });
-    }
-    res.json(category);
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching category', error: err.message });
-  }
-});
+// Public routes
+router.get('/', categoryController.getAllCategories);
+router.get('/search', categoryController.searchCategories);
+router.get('/slug/:slug', categoryController.getCategoryBySlug);
+router.get('/:id', categoryController.getCategoryById);
 
-// Get subcategories of a category
-router.get('/:id/subcategories', async (req, res) => {
-  try {
-    const subcategories = await Category.find({ 
-      parentCategory: req.params.id,
-      active: true 
-    }).sort('name');
-    res.json(subcategories);
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching subcategories', error: err.message });
-  }
+// Protected routes (admin only)
+router.use(authMiddleware.verifyToken, isAdmin);
+
+
+// Admin routes
+router.post('/', categoryController.createCategory);
+router.put('/:id', categoryController.updateCategory);
+router.delete('/:id', categoryController.deleteCategory);
+router.post('/reorder', categoryController.reorderCategories);
+router.get('/stats/overview', categoryController.getCategoryStats);
+
+// Error handling middleware
+router.use((err, req, res, next) => {
+  console.error('Category Router Error:', err);
+  res.status(500).json({
+    message: 'שגיאה בטיפול בבקשה',
+    error: process.env.NODE_ENV === 'development' ? err.message : undefined
+  });
 });
 
 module.exports = router;

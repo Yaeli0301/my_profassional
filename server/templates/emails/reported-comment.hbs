@@ -1,0 +1,37 @@
+<h2>היי {{recipientName}},</h2>
+
+<p>תגובה דווחה למערכת ודורשת את תשומת לבך.</p>
+
+<div class="note">
+  <p><strong>תוכן התגובה:</strong></p>
+  <p>{{commentContent}}</p>
+  
+  <p><strong>מספר דיווחים:</strong> {{reportCount}}</p>
+  
+  {{#if reports.length}}
+  <p><strong>סיבות הדיווח:</strong></p>
+  <ul>
+    {{#each reports}}
+    <li>{{this.reason}} ({{this.date}})</li>
+    {{/each}}
+  </ul>
+  {{/if}}
+</div>
+
+<p>לטיפול בתגובה, לחץ על הכפתור למטה:</p>
+<a href="{{moderationUrl}}" class="button">נהל תגובה</a>
+
+<div class="divider"></div>
+
+<p class="small">
+  תגובה זו דווחה על ידי משתמשים וממתינה להחלטתך. אנא בדוק את התוכן ואת סיבות הדיווח והחלט האם:
+  <ul>
+    <li>לאשר את התגובה אם היא עומדת בתנאי השימוש</li>
+    <li>למחוק את התגובה אם היא מפרה את תנאי השימוש</li>
+    <li>לחסום את המשתמש אם מדובר בהפרה חמורה או חוזרת</li>
+  </ul>
+</p>
+
+<p class="small">
+  זכור: החלטתך חשובה לשמירה על סביבה בטוחה ומכבדת באתר.
+</p>

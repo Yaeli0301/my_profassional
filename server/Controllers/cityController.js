@@ -1,77 +1,172 @@
 const City = require('../Models/city');
 
-// פוקנציה לקבל את כל הערים
-const getAllCities = async (req, res) => {
+// Get all cities
+exports.getAllCities = async (req, res) => {
   try {
-    const cities = await City.find();
+    const cities = await City.find()
+      .sort('name')
+      .select('name district');
     res.json(cities);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    console.error('Error in getAllCities:', error);
+    res.status(500).json({ message: 'שגיאה בטעינת רשימת הערים' });
   }
 };
 
-// פוקנציה לקבל עיר לפי מזהה
-const getCityById = async (req, res) => {
+// Get cities by district
+exports.getCitiesByDistrict = async (req, res) => {
   try {
-    const city = await City.findById(req.params.id);
+    const { district } = req.params;
+    const cities = await City.findByDistrict(district);
+    res.json(cities);
+  } catch (error) {
+    console.error('Error in getCitiesByDistrict:', error);
+    res.status(500).json({ message: 'שגיאה בטעינת ערי המחוז' });
+  }
+};
+
+// Search cities
+exports.searchCities = async (req, res) => {
+  try {
+    const { q } = req.query;
+    if (!q || q.length < 2) {
+      return res.json([]);
+    }
+
+    const cities = await City.searchByName(q);
+    res.json(cities);
+  } catch (error) {
+    console.error('Error in searchCities:', error);
+    res.status(500).json({ message: 'שגיאה בחיפוש ערים' });
+  }
+};
+
+// Get nearby cities
+exports.getNearbyCities = async (req, res) => {
+  try {
+    const { lat, lng, distance } = req.query;
+    if (!lat || !lng) {
+      return res.status(400).json({ message: 'נדרשים קווי אורך ורוחב' });
+    }
+
+    const coordinates = [parseFloat(lng), parseFloat(lat)];
+    const maxDistance = distance ? parseInt(distance) : 10000; // Default 10km
+
+    const cities = await City.findNearby(coordinates, maxDistance);
+    res.json(cities);
+  } catch (error) {
+    console.error('Error in getNearbyCities:', error);
+    res.status(500).json({ message: 'שגיאה בחיפוש ערים קרובות' });
+  }
+};
+
+// Get city by ID
+exports.getCityById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const city = await City.findById(id);
+    
     if (!city) {
-      return res.status(404).json({ message: 'City not found' });
+      return res.status(404).json({ message: 'עיר לא נמצאה' });
     }
+
     res.json(city);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    console.error('Error in getCityById:', error);
+    res.status(500).json({ message: 'שגיאה בטעינת פרטי העיר' });
   }
 };
 
-// פוקנציה להוסיף עיר
-const addCity = async (req, res) => {
-  const { cityName } = req.body;
-  console.log('city name ',cityName);
-  
-  const newCity = new City({ cityName });
+// Admin Routes
 
+// Create new city (admin only)
+exports.createCity = async (req, res) => {
   try {
-    await newCity.save();
-    res.status(201).json(newCity);
-  } catch (err) {
-    res.status(400).json({ message: 'Failed to add city. Please check the input.' });
-  }
-};
+    const { name, district, coordinates } = req.body;
 
-// פוקנציה לעדכן עיר
-const updateCity = async (req, res) => {
-  try {
-    const updatedCity = await City.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-    if (!updatedCity) {
-      return res.status(404).json({ message: 'City not found' });
+    const existingCity = await City.findOne({ name });
+    if (existingCity) {
+      return res.status(400).json({ message: 'עיר זו כבר קיימת במערכת' });
     }
-    res.json(updatedCity);
-  } catch (err) {
-    res.status(400).json({ message: 'Failed to update city. Please check the input.' });
+
+    const city = new City({
+      name,
+      district,
+      location: {
+        type: 'Point',
+        coordinates
+      }
+    });
+
+    await city.save();
+    res.status(201).json(city);
+  } catch (error) {
+    console.error('Error in createCity:', error);
+    res.status(500).json({ message: 'שגיאה ביצירת עיר חדשה' });
   }
 };
 
-// פוקנציה למחוק עיר
-const deleteCity = async (req, res) => {
+// Update city (admin only)
+exports.updateCity = async (req, res) => {
   try {
-    const deletedCity = await City.findByIdAndDelete(req.params.id);
-    if (!deletedCity) {
-      return res.status(404).json({ message: 'City not found' });
+    const { id } = req.params;
+    const { name, district, coordinates, isActive } = req.body;
+
+    const city = await City.findById(id);
+    if (!city) {
+      return res.status(404).json({ message: 'עיר לא נמצאה' });
     }
-    res.status(204).send();
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    if (name && name !== city.name) {
+      const existingCity = await City.findOne({ name });
+      if (existingCity) {
+        return res.status(400).json({ message: 'שם העיר כבר קיים במערכת' });
+      }
+      city.name = name;
+    }
+
+    if (district) city.district = district;
+    if (coordinates) {
+      city.location = {
+        type: 'Point',
+        coordinates
+      };
+    }
+    if (typeof isActive === 'boolean') city.isActive = isActive;
+
+    await city.save();
+    res.json(city);
+  } catch (error) {
+    console.error('Error in updateCity:', error);
+    res.status(500).json({ message: 'שגיאה בעדכון פרטי העיר' });
   }
 };
 
-module.exports = {
-  getAllCities,
-  getCityById,
-  addCity,
-  updateCity,
-  deleteCity
+// Delete city (admin only)
+exports.deleteCity = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const city = await City.findById(id);
+    
+    if (!city) {
+      return res.status(404).json({ message: 'עיר לא נמצאה' });
+    }
+
+    await city.deleteOne();
+    res.json({ message: 'העיר נמחקה בהצלחה' });
+  } catch (error) {
+    console.error('Error in deleteCity:', error);
+    res.status(500).json({ message: 'שגיאה במחיקת העיר' });
+  }
+};
+
+// Get districts
+exports.getDistricts = async (req, res) => {
+  try {
+    const districts = await City.distinct('district');
+    res.json(districts);
+  } catch (error) {
+    console.error('Error in getDistricts:', error);
+    res.status(500).json({ message: 'שגיאה בטעינת רשימת המחוזות' });
+  }
 };

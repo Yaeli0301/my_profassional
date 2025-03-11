@@ -1,0 +1,84 @@
+{{#> layout title="התור בוטל"}}
+    <h2>שלום {{clientName}},</h2>
+    
+    {{#if cancelledByProfessional}}
+    <p>לצערנו, המקצוען ביטל את התור שנקבע.</p>
+    {{else}}
+    <p>התור שקבעת בוטל בהצלחה.</p>
+    {{/if}}
+    
+    <div class="info-box">
+        <h3>פרטי התור שבוטל:</h3>
+        <p><strong>מקצוען:</strong> {{professionalName}}</p>
+        <p><strong>שירות:</strong> {{serviceName}}</p>
+        <p><strong>תאריך ושעה:</strong> {{dateTime}}</p>
+    </div>
+
+    {{#if cancellationReason}}
+    <div style="margin: 20px 0;">
+        <h3>סיבת הביטול:</h3>
+        <p>{{cancellationReason}}</p>
+    </div>
+    {{/if}}
+
+    {{#if cancelledByProfessional}}
+    <div style="margin: 20px 0;">
+        <h3>הודעה מהמקצוען:</h3>
+        {{#if professionalMessage}}
+        <p>{{professionalMessage}}</p>
+        {{else}}
+        <p>המקצוען לא השאיר הודעה נוספת.</p>
+        {{/if}}
+    </div>
+    {{/if}}
+
+    <div style="text-align: center; margin: 30px 0;">
+        <h3>רוצה לקבוע תור חדש?</h3>
+        
+        {{#if cancelledByProfessional}}
+        <p>תוכל/י לקבוע תור חדש עם {{professionalName}} או לחפש מקצוען אחר:</p>
+        <div style="margin: 20px 0;">
+            <a href="{{rescheduleUrl}}" class="button" style="background-color: #059669;">קבע/י תור חדש עם {{professionalName}}</a>
+        </div>
+        <div style="margin: 20px 0;">
+            <a href="{{searchUrl}}" class="button">חפש/י מקצוען אחר</a>
+        </div>
+        {{else}}
+        <div style="margin: 20px 0;">
+            <a href="{{rescheduleUrl}}" class="button" style="background-color: #059669;">קבע/י תור חדש</a>
+        </div>
+        {{/if}}
+    </div>
+
+    {{#if refundInfo}}
+    <div class="info-box" style="background-color: #f0fdf4; border-color: #059669;">
+        <h3>מידע על החזר כספי:</h3>
+        <p>{{refundInfo}}</p>
+        {{#if refundAmount}}
+        <p><strong>סכום ההחזר:</strong> ₪{{refundAmount}}</p>
+        {{/if}}
+        {{#if refundEta}}
+        <p><strong>זמן משוער להחזר:</strong> {{refundEta}}</p>
+        {{/if}}
+    </div>
+    {{/if}}
+
+    <div style="margin-top: 20px;">
+        <h3>צריך/ה עזרה?</h3>
+        <p>אם יש לך שאלות או בעיות, תוכל/י:</p>
+        <ul>
+            {{#if cancelledByProfessional}}
+            <li>ליצור קשר עם המקצוען דרך הצ'אט באתר</li>
+            {{/if}}
+            <li>לפנות לצוות התמיכה שלנו בטלפון: {{supportPhone}}</li>
+            <li>לשלוח לנו מייל: {{supportEmail}}</li>
+        </ul>
+    </div>
+
+    {{#if googleCalendarUrl}}
+    <div style="margin-top: 20px; text-align: center;">
+        <p>אל תשכח/י להסיר את התור מהיומן שלך:</p>
+        <a href="{{googleCalendarUrl}}" class="button" style="background-color: #4285f4;">הסר מ-Google Calendar</a>
+    </div>
+    {{/if}}
+{{/layout}}

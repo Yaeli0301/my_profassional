@@ -1,0 +1,34 @@
+{{#> layout title="אישור קביעת תור"}}
+    <h2>שלום {{clientName}},</h2>
+    <p>תודה שקבעת תור באמצעות My Professional!</p>
+    
+    <div class="info-box">
+        <h3>פרטי התור שלך:</h3>
+        <p><strong>מקצוען:</strong> {{professionalName}}</p>
+        <p><strong>שירות:</strong> {{serviceName}}</p>
+        <p><strong>תאריך:</strong> {{dateTime}}</p>
+        {{#if location}}
+        <p><strong>מיקום:</strong> {{location}}</p>
+        {{/if}}
+    </div>
+
+    <p>התור שלך נקבע בהצלחה ומחכה לאישור המקצוען. תקבל הודעה נוספת ברגע שהתור יאושר.</p>
+
+    <div style="text-align: center;">
+        <a href="{{appointmentUrl}}" class="button">צפה בפרטי התור</a>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h3>תזכורות:</h3>
+        <ul>
+            <li>תקבל תזכורת 24 שעות לפני התור</li>
+            <li>אם ברצונך לבטל או לשנות את התור, אנא עשה זאת לפחות 24 שעות מראש</li>
+            <li>אם יש לך שאלות, תוכל ליצור קשר עם המקצוען ישירות דרך הצ'אט באתר</li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p>להוספת התור ליומן שלך:</p>
+        <a href="{{googleCalendarUrl}}" class="button" style="background-color: #4285f4;">הוסף ל-Google Calendar</a>
+    </div>
+{{/layout}}

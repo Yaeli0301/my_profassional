@@ -1,0 +1,56 @@
+{{#> layout title="התור שלך אושר!"}}
+    <h2>שלום {{clientName}},</h2>
+    <p>המקצוען אישר את התור שקבעת!</p>
+    
+    <div class="info-box">
+        <h3>פרטי התור המאושר:</h3>
+        <p><strong>מקצוען:</strong> {{professionalName}}</p>
+        <p><strong>שירות:</strong> {{serviceName}}</p>
+        <p><strong>תאריך ושעה:</strong> {{dateTime}}</p>
+        {{#if location}}
+        <p><strong>מיקום:</strong> {{location}}</p>
+        {{/if}}
+        {{#if price}}
+        <p><strong>מחיר:</strong> ₪{{price}}</p>
+        {{/if}}
+    </div>
+
+    <div style="margin: 20px 0;">
+        <h3>הערות מהמקצוען:</h3>
+        {{#if professionalNotes}}
+        <p>{{professionalNotes}}</p>
+        {{else}}
+        <p>אין הערות מיוחדות</p>
+        {{/if}}
+    </div>
+
+    <div style="text-align: center;">
+        <a href="{{appointmentUrl}}" class="button">צפה בפרטי התור</a>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h3>מה הלאה?</h3>
+        <ul>
+            <li>תקבל/י תזכורת 24 שעות לפני התור</li>
+            <li>תוכל/י לתקשר עם המקצוען דרך הצ'אט באתר</li>
+            <li>אם צריך לבטל או לשנות את התור, אנא עשה/י זאת לפחות 24 שעות מראש</li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p>להוספת התור ליומן שלך:</p>
+        <a href="{{googleCalendarUrl}}" class="button" style="background-color: #4285f4;">הוסף ל-Google Calendar</a>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p>צריך/ה לשנות משהו?</p>
+        <a href="{{cancelUrl}}" class="button" style="background-color: #dc2626;">בטל/י תור</a>
+        <a href="{{rescheduleUrl}}" class="button" style="background-color: #059669;">קבע/י תור חדש</a>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="color: #666; font-size: 14px;">
+            נשמח לראותך בקרוב!
+        </p>
+    </div>
+{{/layout}}

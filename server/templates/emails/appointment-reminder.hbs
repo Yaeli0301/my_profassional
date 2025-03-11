@@ -1,0 +1,48 @@
+{{#> layout title="תזכורת לתור"}}
+    <h2>שלום {{clientName}},</h2>
+    <p>זוהי תזכורת לתור שקבעת באמצעות My Professional.</p>
+    
+    <div class="info-box">
+        <h3>פרטי התור:</h3>
+        <p><strong>מקצוען:</strong> {{professionalName}}</p>
+        <p><strong>שירות:</strong> {{serviceName}}</p>
+        <p><strong>תאריך:</strong> {{date}}</p>
+        <p><strong>שעה:</strong> {{time}}</p>
+        {{#if location}}
+        <p><strong>מיקום:</strong> {{location}}</p>
+        {{/if}}
+    </div>
+
+    <div style="margin: 20px 0;">
+        <h3>הנחיות חשובות:</h3>
+        <ul>
+            <li>אנא הגע/י בזמן לתור</li>
+            <li>במקרה של איחור, אנא עדכן/י את המקצוען</li>
+            <li>אם עליך לבטל, אנא עשה/י זאת בהקדם האפשרי</li>
+        </ul>
+    </div>
+
+    <div style="text-align: center;">
+        <a href="{{appointmentUrl}}" class="button">צפה בפרטי התור</a>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <p>אם יש לך שאלות או בקשות מיוחדות, תוכל/י ליצור קשר עם המקצוען ישירות דרך:</p>
+        <ul>
+            <li>צ'אט באתר</li>
+            <li>טלפון: {{professionalPhone}}</li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="color: #666; font-size: 14px;">
+            * אם כבר ביטלת את התור, אנא התעלם/י מהודעה זו
+        </p>
+    </div>
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p>לא מצליח/ה להגיע?</p>
+        <a href="{{cancelUrl}}" class="button" style="background-color: #dc2626;">בטל/י תור</a>
+        <a href="{{rescheduleUrl}}" class="button" style="background-color: #059669;">קבע/י תור חדש</a>
+    </div>
+{{/layout}}

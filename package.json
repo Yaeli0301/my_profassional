@@ -1,23 +1,21 @@
 {
   "name": "my-professional",
   "version": "1.0.0",
-  "description": "Full stack application for My Professional",
+  "description": "Professional services platform",
+  "main": "index.js",
   "scripts": {
-    "install:all": "npm install && cd server && npm install && cd ../client/my_proffssional && npm install",
     "server": "cd server && npm run dev",
     "client": "cd client/my_proffssional && npm start",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
-     
-  },
-  "devDependencies": {
-    "concurrently": "^8.0.1",
-    "cross-env": "^7.0.3"
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "dependencies": {
-    "@mui/x-date-pickers": "^7.27.1",
-    "formik": "^2.4.6",
-    "react-router-dom": "^7.2.0",
-    "yup": "^1.6.1"
+    "@fontsource/assistant": "^5.2.5",
+    "@fontsource/rubik": "^5.2.5",
+    "bcrypt": "^5.1.1",
+    "concurrently": "^8.2.2",
+    "googleapis": "^146.0.0",
+    "moment": "^2.30.1",
+    "node-fetch": "^3.3.2",
+    "nodemailer-express-handlebars": "^7.0.0"
   }
 }
